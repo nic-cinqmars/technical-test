@@ -1,4 +1,4 @@
-import { TodosDto } from '../../dto/todos-dto';
+import { TodosDto, TodosCreateDto } from '../../dto/todos-dto';
 
 class TodosMockService {
   static mockTodos: TodosDto[] = [
@@ -24,6 +24,12 @@ class TodosMockService {
 
   public static async deleteTodo(id: string) {
     TodosMockService.mockTodos = TodosMockService.mockTodos.filter((todo) => todo.id !== id);
+  }
+
+  public static async createTodo(newTodo: TodosCreateDto) {
+    const id = Number(TodosMockService.mockTodos[TodosMockService.mockTodos.length - 1].id) + 1;
+    const todoDto: TodosDto = { id: id.toString(), title: newTodo.title, description: newTodo.description, completed: newTodo.completed };
+    TodosMockService.mockTodos.push(todoDto);
   }
 }
 

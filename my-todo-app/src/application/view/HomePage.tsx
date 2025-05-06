@@ -1,16 +1,25 @@
 import { Container, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Box } from '@mui/material';
+import CreateTodoDialog from '../components/create-todo-dialog'
 import { useTodosList } from '../../domain/todos/hooks/useTodosList';
 import { useTodoDelete } from '../../domain/todos/hooks/useTodoDelete';
+import { useTodoCreate } from "../../domain/todos/hooks/useTodoCreate.tsx";
 import { toast } from 'sonner';
+import { TodosCreateDto } from "../../domain/todos/dto/todos-dto.ts";
 
 export const HomePage = () => {
   const { data: todos, isLoading } = useTodosList();
   const { mutate: deleteTodo } = useTodoDelete();
+  const { mutate: createTodo } = useTodoCreate();
 
   const handleDelete = (id: string) => {
     deleteTodo(id);
     toast.success('Todo deleted successfully');
   };
+
+  const handleSubmit = (newTodo: TodosCreateDto) => {
+    createTodo(newTodo);
+    toast.success('Todo created successfully');
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -19,9 +28,7 @@ export const HomePage = () => {
   return (
     <Container maxWidth='md' sx={{ mt: 4 }}>
       <Box display='flex' justifyContent='flex-end' mb={2}>
-        <Button variant='contained' color='primary'>
-          Create New Todo
-        </Button>
+          <CreateTodoDialog onSubmit={handleSubmit}/>
       </Box>
 
       <TableContainer component={Paper}>
